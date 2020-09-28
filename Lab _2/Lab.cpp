@@ -1,21 +1,18 @@
-// Lab.cpp: определяет точку входа для консольного приложения.
-//
-
-
 #include <stdio.h>
-#include <ctype.h>
 
 
 
-//#pragma warning(disable : 4996)  
 
-//#pragma warning(disable : 4996)  
+
+
+
+//проверяет является ли переданный символ буквой.
 
 int checkLetter(char d){
-  if((d>='a')&&(d<='z')){
+  if((d>='a')&&(d<='z')){//		коды строчных букв идут последовательно  
     return 1;
   }
-  if((d>='A')&&(d<='Z')){
+  if((d>='A')&&(d<='Z')){//		коды заглавных букв идут последовательно 
     return 1;
   }
   return 0;
@@ -33,7 +30,7 @@ int main()
   printf("%s","Enter string\n");
 
   //scanf("%100[0-9a-zA-Z ]", &dat);
-  gets_s(dat);
+  gets(dat);
   printf("%s","Enter arg\n");
   scanf("%d", &want);
   int kol=0;
