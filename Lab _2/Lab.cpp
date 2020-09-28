@@ -23,9 +23,7 @@ int checkLetter(char d){
 
 
 
-int main()
-{
-	char dat;
+int main(){
 	int want=1;
 	//scanf("%d",&len);
 
@@ -37,7 +35,7 @@ int main()
 	int kol=0;
 	int len=0;
 	for(int i=0;;i++){
-		dat=getchar();
+		int dat=getchar();
 		if(checkLetter(dat)!=0){
 			len++;
 
@@ -51,7 +49,7 @@ int main()
 		}
 		if(dat=='\n'){
 			if(i!=0){
-			break;
+				break;
 			}
 		}
 	}
