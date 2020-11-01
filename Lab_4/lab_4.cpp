@@ -15,6 +15,7 @@ int checkLetter(char d) {
 	case 'y':
 	case 'u':
 	case 'o':
+	case 'i':
 		return 2;
 	}
 	if ((d >= 'a') && (d <= 'z')) {
@@ -50,6 +51,7 @@ int main() {
 	int count = 0;
 	for (int i = 0;i < sizeof(dat);i++) {
 		if (dat[i] == '\n') {
+			dat[i] = NULL;
 			break;
 		}
 		if (checkLetter(dat[i]) != 0) {
