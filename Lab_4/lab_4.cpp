@@ -30,12 +30,12 @@ struct vbStr {
 };
 
 int main() {
-	vbStr vb[100000];
-	char dat[100000];
+	vbStr vb[10000];
+	char dat[10000];
 	for (int i = 0;i < sizeof(dat);i++) {
 		dat[i] = NULL;
 	}
-	for (int i = 0;i < 100000;i++) {
+	for (int i = 0;i < sizeof(vb) / sizeof(vb[0]);i++) {
 		vb[i].d = NULL;
 		vb[i].kol = 0;
 	}
