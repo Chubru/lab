@@ -51,6 +51,7 @@ int main() {
 	int count = -1;
 	for (int i = 0;i < sizeof(dat);i++) {
 		if (dat[i] == '\n') {
+			dat[i] = NULL;
 			break;
 		}
 		if (checkLetter(dat[i]) != 0) {
