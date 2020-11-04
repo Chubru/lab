@@ -48,39 +48,37 @@ int main() {
 
 	//printf("%s %d\n", "Kol =", kol);
 	bool  st = false;
-	int count = 0;
+	int count = -1;
 	for (int i = 0;i < sizeof(dat);i++) {
 		if (dat[i] == '\n') {
-			dat[i] = NULL;
 			break;
 		}
 		if (checkLetter(dat[i]) != 0) {
 			if (st == false) {
+				count++;
 				vb[count].d = &dat[i];
 			}
 			if (checkLetter(dat[i]) == 2) {
 				vb[count].kol++;
 			}
 			st = true;
-
 		}
 		else {
 			dat[i] = NULL;
 			st = false;
-			count++;
 		}
 	}
 	st = false;
-	for (int i=0;;i++) {
+	for (int i = 0;;i++) {
 
-		if ((vb[i+1].d == NULL) && (vb[i+1].kol == 0)) {
+		if ((vb[i + 1].d == NULL) && (vb[i + 1].kol == 0)) {
 			if (st == false) {
 				break;
 			}
 			st = false;
 			i = 0;
 		}
-		if (vb[i].kol > vb[i+1].kol) {
+		if (vb[i].kol > vb[i + 1].kol) {
 			st = true;
 			vbStr tmp = vb[i];
 			vb[i] = vb[i + 1];
@@ -92,7 +90,13 @@ int main() {
 		if ((vb[i].d == NULL) && (vb[i].kol == 0)) {
 			break;
 		}
-		printf("%s\n", vb[i].d);
+		for (int z = 0;;z++) {
+			if (vb[i].d[z] == NULL) {
+				break;
+			}
+			printf("%c", vb[i].d[z]);
+		}
+		printf("\n");
 	}
 	return 0;
 }
