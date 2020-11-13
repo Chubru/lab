@@ -2,7 +2,7 @@
 #include <ctype.h>
 
 
-//#pragma warning(disable : 4996)  
+#pragma warning(disable : 4996)  
 
 //#pragma warning(disable : 4996)  
 
@@ -57,9 +57,6 @@ int main() {
 	int kol = 0;
 	int lg = 0;
 	for (int i = 0; i < sizeof(str);i++) {
-		if (str[i] == '\n') {
-			break;
-		}
 		if (checkLetter (str[i]) != 0) {
 			lg++;
 		}
@@ -68,6 +65,9 @@ int main() {
 				kol++;
 			}
 			lg = 0;
+		}
+		if (str[i] == '\n') {
+			break;
 		}
 	}
 	printf("\n%d",kol);
