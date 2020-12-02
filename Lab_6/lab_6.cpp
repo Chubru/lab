@@ -32,207 +32,161 @@ int comparestr(const char* s1, const char* s2) {
 	}
 }
 
+
+
 struct vbStr {
-	char vb[1000];
-	vbStr* nextVbStr;
-
+	char* vb;
+	vbStr* nextStr;
+	int len;
 };
-struct vbStrMerge {
-	vbStr* vb;
-	vbStrMerge* vbNextMerge;
 
+struct vbStrHead {
+	vbStr* firstItem;
+	vbStr* lastItem;
 };
-int initVbStr(int fileCod, vbStr* vbStruct) {
-	FILE* h;
-	if (fileCod == 1) {
-		h = fopen("1.txt", "rt");
+
+
+
+
+vbStrHead* insertVb(vbStrHead* vbHead, char* str, int len, int startPos) {
+	if (len < 0) {
+		exit;
+	}
+	char* str_ = (char*)malloc((sizeof(char)) * len + 1);
+	for (int i = 0, k = startPos; i < len; i++, k++) {
+		str_[i] = str[k];
+	}
+	str_[len] = '\0';
+
+	vbStr* vbListNew = (vbStr*)malloc(sizeof(vbStr));
+	if (vbListNew == NULL) {
+		exit;
+	}
+	vbListNew->vb = str_;
+	vbListNew->len = len;
+	vbListNew->nextStr = NULL;
+
+	if (vbHead->lastItem == NULL) {
+		vbHead->lastItem = vbListNew;
+		vbHead->firstItem = vbListNew;
 	}
 	else {
-		h = fopen("2.txt", "rt");
+		vbHead->lastItem->nextStr = vbListNew;
+		vbHead->lastItem = vbListNew;
 	}
+
+	return vbHead;
+}
+
+
+int initVbStr(char* fileName, vbStrHead* vbHead) {
+	FILE* h;
+	h = fopen(fileName, "rt");
 	if (h == NULL) {
 		return -1;
 	}
 	fseek(h, 0, SEEK_END);
 	int len = ftell(h);
 	fseek(h, 0, SEEK_SET);
-	char str[100000];
-	for (int i = 0; i < sizeof(str); i++) {
-		str[i] = '\0';
+	char* str = (char*)malloc(sizeof(char) * (len + 2));
+	int kol = fread(str, sizeof(char), len, h);
+	if (kol > -1) {
+		str[kol] = '\0';
 	}
-	fread(str, 1, len, h);
 	fclose(h);
-
-	int pos = 0;
+	len = 0;
 	bool p = false;
-
-	for (int i = 0; i < sizeof(str); i++) {
+	int beginword = 0;
+	for (int i = 0; i < kol + 1; i++) {
 		if (checkLetter(str[i]) == 1) {
-			if (p == true) {
-				vbStr* vbTmp = (vbStr*)malloc(sizeof(vbStr));
-				if (vbTmp == NULL) {
-					return -1;
-				}
-				vbTmp->nextVbStr = NULL;
-				for (int z = 0; z < 1000; z++) {
-					vbTmp->vb[z] = '\0';
-				}
-				vbStruct->nextVbStr = vbTmp;
-				vbStruct = vbTmp;
-				p = false;
-			}
-			vbStruct->vb[pos] = str[i];
-			pos++;
+			len++;
 		}
 		else {
+			if (len > 0) {
+				vbHead = insertVb(vbHead, str, len, i - len);
+			}
 			p = true;
-			pos = 0;
+			len = 0;
 		}
 	}
+	free(str);
 	return 0;
 }
 
-int merge(vbStr* vbList1, vbStr* vbList2, vbStrMerge* vbKonList) {
+
+
+int merge(vbStrHead* vbHeadList1, vbStrHead* vbHeadList2, vbStrHead* vbHeadKonList) {
+	vbStr* vbList1 = vbHeadList1->firstItem;
+	vbStr* vbList2 = vbHeadList2->firstItem;
+
 	for (;;) {
 		if (comparestr(vbList1->vb, vbList2->vb) == -1) {
-			vbKonList->vb = vbList1;
-			vbStrMerge* vbTmp = (vbStrMerge*)malloc(sizeof(vbStrMerge));
-			if (vbTmp == NULL) {
-				return -1;
-			}
-			vbTmp->vbNextMerge = NULL;
-			vbKonList->vbNextMerge = vbTmp;
-			vbKonList = vbTmp;
-			vbList1 = vbList1->nextVbStr;
+			vbHeadKonList = insertVb(vbHeadKonList, vbList1->vb, vbList1->len, 0);
+			vbList1 = vbList1->nextStr;
 		}
 		else {
-			vbKonList->vb = vbList2;
-			vbStrMerge* vbTmp = (vbStrMerge*)malloc(sizeof(vbStrMerge));
-			if (vbTmp == NULL) {
-				return -1;
-			}
-			vbTmp->vbNextMerge = NULL;
-			vbKonList->vbNextMerge = vbTmp;
-			vbKonList = vbTmp;
-			vbList2 = vbList2->nextVbStr;
+			vbHeadKonList = insertVb(vbHeadKonList, vbList2->vb, vbList2->len, 0);
+			vbList2 = vbList2->nextStr;
+
 		}
 		if ((vbList2 == NULL) || (vbList1 == NULL)) {
 			break;
 		}
 	}
-	for (;;) {
-		if (vbList2 == NULL) {
-			break;
-		}
-		vbKonList->vb = vbList2;
-		vbStrMerge* vbTmp = (vbStrMerge*)malloc(sizeof(vbStrMerge));
-		if (vbTmp == NULL) {
-			return -1;
-		}
-		vbTmp->vbNextMerge = NULL;
-		vbKonList->vbNextMerge = vbTmp;
-		vbKonList = vbTmp;
-		vbList2 = vbList2->nextVbStr;
-
+	for (; vbList2 != NULL;) {
+		vbHeadKonList = insertVb(vbHeadKonList, vbList2->vb, vbList2->len, 0);
+		vbList2 = vbList2->nextStr;
 	}
-	for (;;) {
-		if (vbList1 == NULL) {
-			break;
-		}
-		vbKonList->vb = vbList1;
-		vbStrMerge* vbTmp = (vbStrMerge*)malloc(sizeof(vbStrMerge));
-		if (vbTmp == NULL) {
-			return -1;
-		}
-		vbTmp->vbNextMerge = NULL;
-		vbKonList->vbNextMerge = vbTmp;
-		vbKonList = vbTmp;
-		vbList1 = vbList1->nextVbStr;
-
+	for (; vbList1 != NULL;) {
+		vbHeadKonList = insertVb(vbHeadKonList, vbList1->vb, vbList1->len, 0);
+		vbList1 = vbList1->nextStr;
 	}
 
 	return 0;
 }
 
-
-int out(vbStrMerge* vbKonList) {
-	for (;;) {
-		if (vbKonList->vbNextMerge == NULL) {
-			break;
-		}
-		printf("%s\n", vbKonList->vb->vb);
-		vbKonList = vbKonList->vbNextMerge;
+int out(vbStrHead* vbHeadKonList) {
+	vbStr* vbList = vbHeadKonList->firstItem;
+	for (; vbList->nextStr != NULL;) {
+		printf("%s\n", vbList->vb);
+		vbList = vbList->nextStr;
 	}
 	return 0;
-}
-int delVbStrMerge(vbStrMerge* vbKonList) {
-	if (vbKonList->vbNextMerge != NULL) {
-		delVbStrMerge(vbKonList->vbNextMerge);
-	}
-	free(vbKonList);
-	return 0;
-
 }
 int delVbStr(vbStr* vbList) {
-	if (vbList->nextVbStr != NULL) {
-		delVbStr(vbList->nextVbStr);
+	if (vbList->nextStr != NULL) {
+		delVbStr(vbList->nextStr);
 	}
+	free(vbList->vb);
 	free(vbList);
 	return 0;
-
 }
 int main() {
+	vbStrHead* vbHeadList1 = (vbStrHead*)malloc(sizeof(vbStrHead));
+	vbHeadList1->lastItem = NULL;
+	char f1[] = "1.txt";
+	initVbStr(f1, vbHeadList1);
 
-	//str1[len] = '\0';
-	//vbStr* vbStr1 = (vbStr*)malloc(len / 2 * sizeof(vbStr));
+	vbStrHead* vbHeadList2 = (vbStrHead*)malloc(sizeof(vbStrHead));
+	vbHeadList2->lastItem = NULL;
 
-	//initVbStr(str1, len, vbStr1, len / 2);
-
-	//char dat[10000];
-	//for (int i = 0;i < sizeof(dat);i++) {
-	//	dat[i] = NULL;
-	//}
-	//for (int i = 0;i < sizeof(vb) / sizeof(vb[0]);i++) {
-	//	vb[i].d = NULL;
-	//}
-	////scanf("%d",&len);
-	//printf("%s", "Enter string\n");
-
-	////scanf("%100[0-9a-zA-Z ]", &dat);
-	//fgets(dat, sizeof(dat), stdin);
+	char f2[] = "2.txt";
+	initVbStr(f2, vbHeadList2);
 
 
-	vbStr* vbList1 = (vbStr*)malloc(sizeof(vbStr));
-	if (vbList1 == NULL) {
-		return -1;
-	}
-	for (int z = 0; z < 1000; z++) {
-		vbList1->vb[z] = '\0';
-	}
 
-	initVbStr(1, vbList1);
+	vbStrHead* mergeHeadList = (vbStrHead*)malloc(sizeof(vbStrHead));
+	mergeHeadList->lastItem = NULL;
 
-	vbStr* vbList2 = (vbStr*)malloc(sizeof(vbStr));
-	if (vbList2 == NULL) {
-		return -1;
-	}
-	for (int z = 0; z < 1000; z++) {
-		vbList2->vb[z] = '\0';
-	}
-	initVbStr(2, vbList2);
+	merge(vbHeadList1, vbHeadList2, mergeHeadList);
+	out(mergeHeadList);
 
-
-	vbStrMerge* mergeList = (vbStrMerge*)malloc(sizeof(vbStrMerge));
-	if (mergeList == NULL) {
-		return -1;
-	}
-
-	merge(vbList1, vbList2, mergeList);
-	out(mergeList);
-	delVbStrMerge(mergeList);
-	delVbStr(vbList1);
-	delVbStr(vbList2);
-
+	delVbStr(vbHeadList1->firstItem);
+	delVbStr(vbHeadList2->firstItem);
+	delVbStr(mergeHeadList->firstItem);
+	free(vbHeadList1);
+	free(vbHeadList2);
+	free(mergeHeadList);
 
 	return 0;
 }
