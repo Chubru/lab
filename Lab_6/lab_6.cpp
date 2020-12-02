@@ -33,87 +33,92 @@ int comparestr(const char* s1, const char* s2) {
 }
 
 struct vbStr {
-	char vb[1000];
+	char* vb;
 	vbStr* nextVbStr;
-
 };
+
 struct vbStrMerge {
 	vbStr* vb;
 	vbStrMerge* vbNextMerge;
-
 };
-int initVbStr(int fileCod, vbStr* vbStruct) {
+
+int initVbStr(char* fileName, vbStr* vbStruct) {
 	FILE* h;
-	if (fileCod == 1) {
-		h = fopen("1.txt", "rt");
-	}
-	else {
-		h = fopen("2.txt", "rt");
-	}
+	h = fopen(fileName, "rt");
 	if (h == NULL) {
 		return -1;
 	}
 	fseek(h, 0, SEEK_END);
 	int len = ftell(h);
 	fseek(h, 0, SEEK_SET);
-	char str[100000];
-	for (int i = 0; i < sizeof(str); i++) {
-		str[i] = '\0';
+	char* str = (char*)malloc(sizeof(char) * (len + 2));
+	int kol = fread(str, sizeof(char), len, h);
+	if (kol > -1) {
+		str[kol] = '\0';
 	}
-	fread(str, 1, len, h);
 	fclose(h);
-
-	int pos = 0;
+	len = 0;
 	bool p = false;
-
-	for (int i = 0; i < sizeof(str); i++) {
+	int beginword = 0;
+	for (int i = 0; i < kol+1 ; i++) {
 		if (checkLetter(str[i]) == 1) {
 			if (p == true) {
+				beginword = i;
 				vbStr* vbTmp = (vbStr*)malloc(sizeof(vbStr));
 				if (vbTmp == NULL) {
 					return -1;
 				}
 				vbTmp->nextVbStr = NULL;
-				for (int z = 0; z < 1000; z++) {
-					vbTmp->vb[z] = '\0';
-				}
 				vbStruct->nextVbStr = vbTmp;
 				vbStruct = vbTmp;
+				vbStruct->vb=NULL;
 				p = false;
 			}
-			vbStruct->vb[pos] = str[i];
-			pos++;
+			len++;
 		}
 		else {
+			if (len > 0) {
+				vbStruct->vb = (char*)malloc(sizeof(char) * (len+1));
+				if (vbStruct->vb == NULL) {
+					return -1;
+				}
+				for (int z = beginword, k = 0; k<len; z++, k++) {
+					vbStruct->vb[k] = str[z];
+				}
+				vbStruct->vb[len] = '\0';
+			}
 			p = true;
-			pos = 0;
+			len = 0;
 		}
 	}
+	free(str);
 	return 0;
 }
+
+
+vbStrMerge* insertVbKonList(vbStrMerge* vbKonList) {
+	vbStrMerge* vbTmp = (vbStrMerge*)malloc(sizeof(vbStrMerge));
+	if (vbTmp == NULL) {
+		exit(-1);
+	}
+	vbTmp->vb = NULL;
+	vbTmp->vbNextMerge = NULL;
+	return  vbTmp;
+}
+
 
 int merge(vbStr* vbList1, vbStr* vbList2, vbStrMerge* vbKonList) {
 	for (;;) {
 		if (comparestr(vbList1->vb, vbList2->vb) == -1) {
 			vbKonList->vb = vbList1;
-			vbStrMerge* vbTmp = (vbStrMerge*)malloc(sizeof(vbStrMerge));
-			if (vbTmp == NULL) {
-				return -1;
-			}
-			vbTmp->vbNextMerge = NULL;
-			vbKonList->vbNextMerge = vbTmp;
-			vbKonList = vbTmp;
+			vbKonList->vbNextMerge = insertVbKonList(vbKonList);
+			vbKonList = vbKonList->vbNextMerge;
 			vbList1 = vbList1->nextVbStr;
 		}
 		else {
 			vbKonList->vb = vbList2;
-			vbStrMerge* vbTmp = (vbStrMerge*)malloc(sizeof(vbStrMerge));
-			if (vbTmp == NULL) {
-				return -1;
-			}
-			vbTmp->vbNextMerge = NULL;
-			vbKonList->vbNextMerge = vbTmp;
-			vbKonList = vbTmp;
+			vbKonList->vbNextMerge = insertVbKonList(vbKonList);
+			vbKonList = vbKonList->vbNextMerge;
 			vbList2 = vbList2->nextVbStr;
 		}
 		if ((vbList2 == NULL) || (vbList1 == NULL)) {
@@ -121,34 +126,23 @@ int merge(vbStr* vbList1, vbStr* vbList2, vbStrMerge* vbKonList) {
 		}
 	}
 	for (;;) {
+		vbKonList->vb = vbList2;
+		vbKonList->vbNextMerge = insertVbKonList(vbKonList);
+		vbKonList = vbKonList->vbNextMerge;
 		if (vbList2 == NULL) {
 			break;
 		}
-		vbKonList->vb = vbList2;
-		vbStrMerge* vbTmp = (vbStrMerge*)malloc(sizeof(vbStrMerge));
-		if (vbTmp == NULL) {
-			return -1;
-		}
-		vbTmp->vbNextMerge = NULL;
-		vbKonList->vbNextMerge = vbTmp;
-		vbKonList = vbTmp;
 		vbList2 = vbList2->nextVbStr;
 
 	}
 	for (;;) {
+		vbKonList->vb = vbList1;
+		vbKonList->vbNextMerge = insertVbKonList(vbKonList);
+		vbKonList = vbKonList->vbNextMerge;
 		if (vbList1 == NULL) {
 			break;
 		}
-		vbKonList->vb = vbList1;
-		vbStrMerge* vbTmp = (vbStrMerge*)malloc(sizeof(vbStrMerge));
-		if (vbTmp == NULL) {
-			return -1;
-		}
-		vbTmp->vbNextMerge = NULL;
-		vbKonList->vbNextMerge = vbTmp;
-		vbKonList = vbTmp;
 		vbList1 = vbList1->nextVbStr;
-
 	}
 
 	return 0;
@@ -157,10 +151,12 @@ int merge(vbStr* vbList1, vbStr* vbList2, vbStrMerge* vbKonList) {
 
 int out(vbStrMerge* vbKonList) {
 	for (;;) {
+		if ((vbKonList->vb != NULL)&&(vbKonList->vb->vb != NULL)){
+			printf("%s\n", vbKonList->vb->vb);
+		}
 		if (vbKonList->vbNextMerge == NULL) {
 			break;
 		}
-		printf("%s\n", vbKonList->vb->vb);
 		vbKonList = vbKonList->vbNextMerge;
 	}
 	return 0;
@@ -183,43 +179,20 @@ int delVbStr(vbStr* vbList) {
 }
 int main() {
 
-	//str1[len] = '\0';
-	//vbStr* vbStr1 = (vbStr*)malloc(len / 2 * sizeof(vbStr));
-
-	//initVbStr(str1, len, vbStr1, len / 2);
-
-	//char dat[10000];
-	//for (int i = 0;i < sizeof(dat);i++) {
-	//	dat[i] = NULL;
-	//}
-	//for (int i = 0;i < sizeof(vb) / sizeof(vb[0]);i++) {
-	//	vb[i].d = NULL;
-	//}
-	////scanf("%d",&len);
-	//printf("%s", "Enter string\n");
-
-	////scanf("%100[0-9a-zA-Z ]", &dat);
-	//fgets(dat, sizeof(dat), stdin);
-
 
 	vbStr* vbList1 = (vbStr*)malloc(sizeof(vbStr));
 	if (vbList1 == NULL) {
 		return -1;
 	}
-	for (int z = 0; z < 1000; z++) {
-		vbList1->vb[z] = '\0';
-	}
-
-	initVbStr(1, vbList1);
+	char f1[] = "1.txt";
+	initVbStr(f1, vbList1);
 
 	vbStr* vbList2 = (vbStr*)malloc(sizeof(vbStr));
 	if (vbList2 == NULL) {
 		return -1;
 	}
-	for (int z = 0; z < 1000; z++) {
-		vbList2->vb[z] = '\0';
-	}
-	initVbStr(2, vbList2);
+	char f2[] = "2.txt";
+	initVbStr(f2, vbList2);
 
 
 	vbStrMerge* mergeList = (vbStrMerge*)malloc(sizeof(vbStrMerge));
