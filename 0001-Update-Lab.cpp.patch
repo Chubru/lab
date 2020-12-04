@@ -1,0 +1,170 @@
+From 4094acc2fff03524a2175da841bfbff07729df8c Mon Sep 17 00:00:00 2001
+From: Chubru <71672903+Chubru@users.noreply.github.com>
+Date: Mon, 28 Sep 2020 23:16:56 +0300
+Subject: [PATCH] Update Lab.cpp
+
+---
+ Lab _2/Lab.cpp        |  8 +++-----
+ googleTest/Lab.cpp    | 29 +++++++++++++++++++++++++++++
+ googleTest/googleTest |  1 +
+ googleTest/pch.cpp    |  6 ++++++
+ googleTest/pch.h      |  8 ++++++++
+ googleTest/test.cpp   | 40 ++++++++++++++++++++++++++++++++++++++++
+ 6 files changed, 87 insertions(+), 5 deletions(-)
+ create mode 100644 googleTest/Lab.cpp
+ create mode 160000 googleTest/googleTest
+ create mode 100644 googleTest/pch.cpp
+ create mode 100644 googleTest/pch.h
+ create mode 100644 googleTest/test.cpp
+
+diff --git a/Lab _2/Lab.cpp b/Lab _2/Lab.cpp
+index 49d6821..2097a79 100644
+--- a/Lab _2/Lab.cpp	
++++ b/Lab _2/Lab.cpp	
+@@ -23,9 +23,7 @@ int checkLetter(char d){
+ 
+ 
+ 
+-int main()
+-{
+-	char dat;
++int main(){
+ 	int want=1;
+ 	//scanf("%d",&len);
+ 
+@@ -37,7 +35,7 @@ int main()
+ 	int kol=0;
+ 	int len=0;
+ 	for(int i=0;;i++){
+-		dat=getchar();
++		int dat=getchar();
+ 		if(checkLetter(dat)!=0){
+ 			len++;
+ 
+@@ -51,7 +49,7 @@ int main()
+ 		}
+ 		if(dat=='\n'){
+ 			if(i!=0){
+-			break;
++				break;
+ 			}
+ 		}
+ 	}
+diff --git a/googleTest/Lab.cpp b/googleTest/Lab.cpp
+new file mode 100644
+index 0000000..92891a3
+--- /dev/null
++++ b/googleTest/Lab.cpp
+@@ -0,0 +1,29 @@
++// Lab.cpp: определяет точку входа для консольного приложения.
++//
++
++
++#include <stdio.h>
++#include "pch.h"
++
++
++
++
++
++#pragma warning(disable : 4996)  
++
++
++
++
++
++inline  int checkLetter(char d) {
++	if ((d >= 'A') && (d <= 'Z')) {
++		return 2;
++	}
++
++	if ((d >= 'a') && (d <= 'z')) {
++		return 1;
++	}
++	return 0;
++}
++
++
+diff --git a/googleTest/googleTest b/googleTest/googleTest
+new file mode 160000
+index 0000000..bfd173c
+--- /dev/null
++++ b/googleTest/googleTest
+@@ -0,0 +1 @@
++Subproject commit bfd173c38eaa1c244ada4d3072b83e7aa7e43d2d
+diff --git a/googleTest/pch.cpp b/googleTest/pch.cpp
+new file mode 100644
+index 0000000..97b544e
+--- /dev/null
++++ b/googleTest/pch.cpp
+@@ -0,0 +1,6 @@
++//
++// pch.cpp
++// Include the standard header and generate the precompiled header.
++//
++
++#include "pch.h"
+diff --git a/googleTest/pch.h b/googleTest/pch.h
+new file mode 100644
+index 0000000..29c81ff
+--- /dev/null
++++ b/googleTest/pch.h
+@@ -0,0 +1,8 @@
++//
++// pch.h
++// Header for standard system include files.
++//
++
++#pragma once
++
++#include "gtest/gtest.h"
+diff --git a/googleTest/test.cpp b/googleTest/test.cpp
+new file mode 100644
+index 0000000..0300808
+--- /dev/null
++++ b/googleTest/test.cpp
+@@ -0,0 +1,40 @@
++#include "pch.h"
++#include "Lab.cpp"
++
++
++TEST(TestCaseName, TestName) {
++  EXPECT_EQ(1, 1);
++  EXPECT_TRUE(true);
++}
++
++TEST(checkLetterTest, negativeInput) {
++	for (int i = -128 ; i < 0; i++) {
++		ASSERT_EQ(checkLetter(i), 0);
++	}
++}
++TEST(checkLetterTest, from_0_to_A_Input) {
++	for (int i = 0; i < 'A'; i++) {
++		ASSERT_EQ(checkLetter(i), 0);
++	}
++	checkLetter(' ');
++}
++TEST(checkLetterTest, from_A_to_Z_Input) {
++	for (int i = 'A'; i <= 'Z'; i++) {
++		ASSERT_EQ(checkLetter(i), 2);
++	}
++}
++TEST(checkLetterTest, from_Z_to_a_Input) {
++	for (int i = 'Z'+1; i < 'a'; i++) {
++		ASSERT_EQ(checkLetter(i), 0);
++	}
++}
++TEST(checkLetterTest, from_a_to_z_Input) {
++	for (int i = 'a'; i <= 'z'; i++) {
++		ASSERT_EQ(checkLetter(i), 1);
++	}
++}
++TEST(checkLetterTest, positivInput) {
++	for (int i = 'z'+1; i <= 127; i++) {
++		ASSERT_EQ(checkLetter(i), 0);
++	}
++}
+\ No newline at end of file
+-- 
+2.28.0.windows.1
+
