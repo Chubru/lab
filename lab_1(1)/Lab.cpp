@@ -35,15 +35,7 @@ int main()
 	printf("%s","Enter c\n");
 
 	scanf("%d",&c);
-	if(z<=0){
-		printf("%s","false\n");
-		return 0;
-	}
-	if(b<=0){
-		printf("%s","false\n");
-		return 0;
-	}
-	if(c<=0){
+	if((z<=0)||(b <= 0)||(c <= 0)){
 		printf("%s","false\n");
 		return 0;
 	}
