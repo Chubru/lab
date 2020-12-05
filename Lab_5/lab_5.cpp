@@ -5,7 +5,6 @@
 #pragma warning(disable : 4996)  
 
 //#pragma warning(disable : 4996)  
-using namespace std;
 int checkLetter(char d) {
 	d = d | 0x20;
 	if ((d >= 'a') && (d <= 'z')) {
@@ -62,7 +61,9 @@ int main() {
 		break;
 	}
 	char* vb = (char*)malloc(lenW * sizeof(char));
-
+	if (vb == NULL) {
+		return -1;
+	}
 	for (int i = 0; i < lenW; i++) {
 		vb[i] = NULL;
 	}

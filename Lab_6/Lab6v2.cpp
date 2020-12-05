@@ -24,12 +24,7 @@ int comparestr(const char* s1, const char* s2) {
 		if (s1[i] == 0)
 			return 0;
 	}
-	if (s1[i] > s2[i]) {
-		return 1;
-	}
-	else {
-		return -1;
-	}
+	return s1[i] > s2[i] ? 1 : -1;
 }
 
 
@@ -53,6 +48,9 @@ vbStrHead* insertVb(vbStrHead* vbHead, char* str, int len, int startPos) {
 		exit;
 	}
 	char* str_ = (char*)malloc((sizeof(char))*len + 1);
+	if (str_ == NULL) {
+		return -1;
+	}
 	for (int i = 0, k = startPos; i < len; i++, k++) {
 		str_[i] = str[k];
 	}
