@@ -83,7 +83,7 @@ int set(vbStrHead* head, int value,int id) {
 
 int insert(vbStrHead* head, int value, int id) {
 	vbStr* str = head->firstItem;
-	for (int i = 1; i < id; i++) {
+	for (int i = 0; i < id; i++) {
 		if (str->nextStr == NULL) {
 			return -1;
 		}
@@ -157,7 +157,9 @@ int erase(vbStrHead* head, int value, int id) {
 int main()
 {
 	vbStrHead* head = init();
-	insert(head, 22, 0);
+	push_back(head, 55);
+	insert(head, 22, 1);
+	insert(head, 11, 1);
 	push_back(head, 55);
 	push_back(head, 66);
 	push_back(head, 77);
