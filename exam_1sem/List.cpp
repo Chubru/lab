@@ -97,13 +97,30 @@ int insert(vbStrHead* head, int value, int id) {
 
 	strN->dat = value;
 	strN->nextStr = str;
-	strN->previousStr = str->previousStr;
+	strN->previousStr = NULL;
 
 
-	str->previousStr = strN;
+	if (str != NULL) {
 
-	strN->previousStr->nextStr = strN;
-	
+		if (str->previousStr != NULL) {
+			str->previousStr->nextStr = strN;
+		}
+		else {
+			head->firstItem = strN;
+		}
+
+		if (str->nextStr != NULL) {
+			str->nextStr->previousStr = strN;
+		}
+		else{
+			head->lastItem = strN;
+		}
+	}
+
+	else {
+		head->firstItem = strN;
+		head->lastItem = strN;
+	}
 	return 0;
 }
 //////////////////////////////////////////////////////////////////////////////10.4
@@ -119,6 +136,9 @@ int get(vbStrHead* head, int id) {
 }
 
 int erase(vbStrHead* head, int value, int id) {
+	if (head->firstItem == NULL) {
+		return -1;
+	}
 	vbStr* str = head->firstItem;
 	for (int i = 1; i < id; i++) {
 		if (str->nextStr == NULL) {
@@ -137,10 +157,12 @@ int erase(vbStrHead* head, int value, int id) {
 int main()
 {
 	vbStrHead* head = init();
+	insert(head, 22, 0);
 	push_back(head, 55);
 	push_back(head, 66);
 	push_back(head, 77);
 	int dat=get(head, 5);
+	insert(head, 11, 5);
 	set(head, 33, 6);
 	insert(head, 22, 6);
 	destroy(head);
