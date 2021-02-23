@@ -8,7 +8,7 @@ int main()
 {
 	char str[20]="";
 	long dat = input();
-	ltoao1(dat, &str[0]);
+	ltoao2(dat, &str[0]);
 	output(str);
 	return 0;
 }
