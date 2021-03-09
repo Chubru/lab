@@ -22,13 +22,13 @@ public:
 	Rational& operator -= (const Rational& a) { *this = *this - a; return *this; };
 	Rational& operator *= (const Rational& a) { *this = *this * a; return *this; };
 	Rational& operator /= (const Rational& a) { *this = *this / a; return *this; };
-
+	Rational& operator=(const Rational& a) = default;
 	rint_t getNumerator() const { return m_numerator; }
 	rint_t getDenominator() const { return m_denominator; }
 
 	//void out();
 };
-Rational operator + (const rint_t a,const Rational& b) {
+inline Rational operator + (const rint_t a,const Rational& b) {
 	Rational z = Rational(a) + b;
 	return z;
 }
