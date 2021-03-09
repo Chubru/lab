@@ -6,11 +6,14 @@
 int main()
 {
 	try {
-		Rational a,b;
-		std::cin >> a >> b;
+		Rational a;
+		Rational b(3,5);
+		//int fff = 5;
+		Rational z = 5 + b;
+		//b = (Rational)5 + a;
+		//std::cin >> a >> b;
+		//std::cout << a / b;
 		std::cout << a / b;
-
-
 	}
 	catch (const char* error) {
 		std::cout << error << std::endl;

@@ -20,6 +20,7 @@ Rational Rational::operator + (const Rational& a) {
     return res;
 }
 
+
 Rational Rational::operator * (const Rational& a) {
     Rational res(this->m_numerator * a.m_numerator, this->m_denominator * a.m_denominator);
     rint_t nod_ = nod(res.m_denominator, abs(res.m_numerator));
