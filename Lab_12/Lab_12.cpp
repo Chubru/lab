@@ -5,8 +5,14 @@
 #include "Rational.h"
 int main()
 {
-	Rational aa(1,2);
-	Rational bb(1,3);
-	Rational cc = bb - aa;
-	std::cout << "";
+	try {
+		Rational a,b;
+		std::cin >> a >> b;
+		std::cout << a / b;
+
+
+	}
+	catch (const char* error) {
+		std::cout << error << std::endl;
+	}
 }
