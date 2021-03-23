@@ -22,7 +22,7 @@ matrix::~matrix() {
 	}
 	delete[] matrix_p;
 }
-void matrix::localExtremum() {
+void matrix::localExtremum(void (*callBack_p)(int, int, const char*, void*)) {
 	for (int i = 0; i < n; i++) {
 		for (int j = 0; j < m; j++) {
 			std::cout << std::setw(5) << matrix_p[i][j];
@@ -34,7 +34,7 @@ void matrix::localExtremum() {
 			if (x > 0 && x < (n-1)) {
 				if ((matrix_p[x - 1][y]<matrix_p[x][y] && matrix_p[x][y]>matrix_p[x + 1][y]) ||
 					(matrix_p[x - 1][y] > matrix_p[x][y] && matrix_p[x][y] < matrix_p[x + 1][y])) {
-					callBack(x, y,"y extremum", NULL);
+					callBack_p(x, y,"y extremum", NULL);
 
 				}
 
@@ -43,15 +43,11 @@ void matrix::localExtremum() {
 			if (y > 0 && y < (m-1)) {
 				if ((matrix_p[x][y - 1]<matrix_p[x][y] && matrix_p[x][y]>matrix_p[x][y + 1]) ||
 					(matrix_p[x][y - 1] > matrix_p[x][y] && matrix_p[x][y] < matrix_p[x + 1][y])) {
-					callBack(x, y,"x extremum", NULL);
+					callBack_p(x, y,"x extremum", NULL);
 				}
 			}
 
 		}
 	}
 
-}
-void callBack(int x, int y, const char* massages, void* pt) {
-	std::cout << massages << ": [" << x << ":" << y << "]\n";
-	return;
 }

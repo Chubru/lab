@@ -7,7 +7,6 @@ private:
 public:
 	matrix();
 	~matrix();
-	void localExtremum();
+	void localExtremum(void (*callBack_p)(int, int, const char*, void*));
 	
 };
-void callBack(int x, int y, const char* massages, void* pt);
