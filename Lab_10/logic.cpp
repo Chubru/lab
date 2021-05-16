@@ -12,11 +12,21 @@ filterDataStrHead filterDataHead;
 void out(char ch) {
     printf("%c", ch);
 }
-
+void filter8(char dat, filteCurlyBraceStr& filterStr) {
+    if (dat == '\n') {
+        filterStr.count++;
+    }
+    else {
+        filterStr.count = 0;
+    }
+    if (filterStr.count <= 1) {
+        out(dat);
+    }
+}
 void filter7(char dat) {
-    out(dat);
+    filter8(dat, filterDataHead.filter8);
     if (dat == ')') {
-        out(';');
+        filter8(';', filterDataHead.filter8);
     }
 
 }
@@ -215,7 +225,7 @@ void filter1(char dat) {
 
 
 void prolog() {
-   long t = time(NULL);
+    long t = time(NULL);
     char str[1000];
     sprintf(str, "#ifndef _LOGIC_%08X__H\n#define _LOGIC_%08X__H\n", t, t);
     for (int i = 0; str[i] != '\0'; i++) {

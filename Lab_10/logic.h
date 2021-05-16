@@ -19,10 +19,12 @@ struct filterDataStrHead {
     filteCurlyBraceStr filter4;
     filterDataStr filter5;
     filterDataStr filter6;
+    filteCurlyBraceStr filter8;
 };
 
 
 void filter1(char dat);
 void prolog();
 void epilog();
+extern filterDataStrHead filterDataHead;
 #endif // _LOGIC_H_
