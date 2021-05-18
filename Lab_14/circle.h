@@ -14,10 +14,11 @@ public:
         if (text != nullptr) {
             std::cout << " text - " << text << "\n";
         }
-        else{
+        else {
             std::cout << "\n";
         }
     }
+    
     circle(int x_,int y_,int R, const  char* textPtr) 
         //: text (textPtr),  r(R)
     {
@@ -26,5 +27,6 @@ public:
         r = R;
         text = textPtr;
     }
+    void printxy();
 };
 

@@ -30,5 +30,6 @@ public:
 	Node* getNextNode() {
 		return nextNode;
 	}
+
 };
 
