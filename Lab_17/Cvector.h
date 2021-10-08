@@ -48,17 +48,23 @@ public:
         }
     }
 
-    T& operator [](int index){
+    T& operator [](size_t_ index){
+        if( index > usage || index < 0 ){
+            throw "invalid index";
+        }
         return ptr[index];
     }
-    T& at(int index){
+    T& at(size_t_ index){
+        if( index > usage || index < 0 ){
+            throw "invalid index";
+        }
         return ptr[index];
     }
-
-
-
 
     void insert(size_t_ i, const T& value){
+        if( i > usage || i < 0 ){
+            throw "invalid index";
+        }
         if(usage<size-1) {
             T *tmpPtr = new T[size + incr];
             for (int i = 0; i < size; i++) {
@@ -75,6 +81,10 @@ public:
     }
 
     void erase(size_t_ id){
+        if( id > usage || id < 0 ){
+            throw "invalid index";
+        }
+
         for(size_t_ i=id;i<size;i++){
             ptr[i]=ptr[i+1];
         }
