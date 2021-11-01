@@ -18,7 +18,7 @@ void f(int numberItems,int n = 0){
             if(std::find(storage.begin(), storage.end(), i)!=storage.end())
                 continue;
             storage.push_back(i);
-            f(numberItems,k,n+1);
+            f(numberItems,n+1);
             storage.pop_back();
         }
     }
