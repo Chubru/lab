@@ -46,6 +46,16 @@ int main() {
         Spoint pnt = pointList[0];
         std::cout<<"x="<<pnt.x<<"y:"<<pnt.y;
 
+
+
+        Cvector<int>dat1;
+        for(int i = 0;i < 10;i++){
+            dat1.pushBack(i);
+        }
+        for(int i = 0;i < 10;i++){
+            std::cout<<dat1[i]<<std::endl;
+        }
+
     }
     catch (...){
         std::cout<<"invalid index";

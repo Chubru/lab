@@ -1,0 +1,10 @@
+Сделать реализацию vector на шаблонах.  
+vector(size_t size, const T& value)
+push_back
+size
+operator[]
+at (бросает исключения)
+insert(size_t i, const T& value) (бросает исключения)
+erase(size_t i) (бросает исключения)
+
+ 
