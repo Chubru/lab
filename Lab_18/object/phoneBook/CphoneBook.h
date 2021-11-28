@@ -47,5 +47,8 @@ public:
 
     bool load(const std::string& filename);
 
+    void saveB(std::ofstream& of);
+    void loadB(std::ifstream& inf);
+
 };
 #endif //LAB_18_CPHONEBOOK_H

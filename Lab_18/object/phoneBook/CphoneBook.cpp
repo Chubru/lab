@@ -59,3 +59,21 @@ bool CphoneBook::addContact(std::string name,unsigned phone){
     }
 }
 
+
+void CphoneBook::saveB(std::ofstream& of){
+    unsigned len = size();
+    of.write((char*)&len, sizeof(unsigned));
+    for(auto tmp:*this){
+        tmp.save(of);
+    }
+}
+
+void CphoneBook::loadB(std::ifstream& inf){
+    unsigned count = 0;
+    inf.read((char*)&count,sizeof(unsigned));
+    for(int i = 0; i < count; i++){
+        Cperson tmp ;
+        tmp.load(inf);
+        insert(end(), tmp);
+    }
+}
