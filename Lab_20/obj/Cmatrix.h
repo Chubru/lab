@@ -20,7 +20,7 @@
 class Cmatrix {
     std::vector<std::vector<int>> matrix;
     std::vector<int> mark;
-    int n{0},root{0};
+    int dc{0},root{0};
 public:
     void load(const std::string& filename);
     void dfs(std::ostream& stream);

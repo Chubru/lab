@@ -3,7 +3,7 @@
 #include "obj/Cmatrix.h"
 int main() {
    Cmatrix matrix;
-   matrix.load("../1.txt");
+   matrix.load("../2.txt");
     //std::ofstream fout;
     //fout.open("file.txt");
     // matrix.dfs(fout);
